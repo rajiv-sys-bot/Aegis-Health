@@ -247,7 +247,7 @@ export default function ClaimsPage() {
                         <>
                           {claim.status === "Pending" && isInsurer ? (
                             <>
-                              <Button size="sm" onClick={() => void act("approve", claim.claimId)}>
+                              <Button emphasis size="sm" onClick={() => void act("approve", claim.claimId)}>
                                 Approve
                               </Button>
                               <Button
@@ -269,7 +269,7 @@ export default function ClaimsPage() {
                             </Button>
                           ) : null}
                           {claim.status === "Approved" && isInsurer ? (
-                            <Button size="sm" onClick={() => void act("pay", claim.claimId)}>
+                            <Button emphasis size="sm" onClick={() => void act("pay", claim.claimId)}>
                               Pay provider
                             </Button>
                           ) : null}

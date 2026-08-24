@@ -197,7 +197,7 @@ export default function DoctorDashboard() {
                 ))}
               </div>
             </div>
-            <Button type="submit" loading={submitting} className="w-full">
+            <Button type="submit" loading={submitting} emphasis className="w-full">
               <Send className="size-4" />
               Request patient access
             </Button>

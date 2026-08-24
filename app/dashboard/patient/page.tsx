@@ -143,6 +143,7 @@ export default function PatientDashboard() {
         description="Your records remain encrypted off-chain. You decide who can open them, until when — every change is a signed transaction."
         actions={
           <Button
+            emphasis
             onClick={() => view.records[0] && openGrant(view.records[0].id)}
             disabled={view.records.length === 0}
           >

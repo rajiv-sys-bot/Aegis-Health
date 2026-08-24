@@ -54,12 +54,14 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
+  emphasis?: boolean;
 }
 
 export function Button({
   variant = "primary",
   size = "md",
   loading = false,
+  emphasis = false,
   disabled,
   className,
   children,
@@ -67,7 +69,14 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={buttonClass(variant, size, className ?? "")}
+      className={buttonClass(
+        variant,
+        size,
+        cn(
+          emphasis && "ring-2 ring-brand-200 ring-offset-2 ring-offset-background",
+          className ?? "",
+        ),
+      )}
       disabled={disabled || loading}
       {...rest}
     >
