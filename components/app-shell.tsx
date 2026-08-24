@@ -106,6 +106,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Link
                   key={href}
                   href={href}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
                     "flex min-h-11 flex-col items-center justify-center gap-1 rounded-xl px-1 text-[10px] font-bold transition-colors",
                     active
