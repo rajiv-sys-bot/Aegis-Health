@@ -30,7 +30,8 @@ const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
     "bg-brand-600 text-white shadow-sm shadow-brand-900/15 hover:bg-brand-700 hover:shadow-md active:bg-brand-800",
   secondary:
     "border border-line-strong bg-surface text-ink shadow-sm hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700",
-  ghost: "text-ink-secondary hover:bg-surface-muted hover:text-ink",
+  ghost:
+    "border border-transparent text-ink-secondary hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700",
   danger: "bg-danger text-white shadow-sm shadow-danger/15 hover:brightness-95",
   subtle: "bg-brand-50 text-brand-700 hover:bg-brand-100",
 };
