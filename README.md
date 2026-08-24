@@ -224,3 +224,20 @@ Frontend behavior is split between `app/` routes, reusable UI in `components/hea
 ## Privacy and safety boundary
 
 Aegis stores no plaintext medical record in the Soroban contract. The current demo uses integrity hashes and permission metadata. A production deployment still needs audited encryption/storage, key management, identity verification, access logging policy, threat modeling, legal/privacy review, and clinical safety review before handling real health information.
+
+## User feedback and fixes
+
+The following ten feedback responses were selected from the testnet usability run. Timestamps are intentionally omitted; transaction hashes are preserved as submitted evidence.
+
+| Name | Email | Rating | Wallet address | Transaction hash | Experience | Feedback | Fix commit |
+| --- | --- | ---: | --- | --- | --- | --- | --- |
+| MD FARUKH | farukh1132@gmail.com | 4 | `GBAEKHIOEAQTDPLUBTYO3T4F2ZXU6A5IYLQAXNRBZVWBWYA7INPPIT3C` | `580f0c5cac4984bd69dd7548212cedb126f37b143794ca97b90238f3254bc004` | Smooth and easy to use | Make the active wallet more noticeable | `09897dd` |
+| Anupam Jaiswal | anupamj0107@gmail.com | 5 | `GDHOP6BL3JDHR4ZZ3XMYUNX7XISZIJ57WGYKE6FXPD6FT5L2DCYANIPX` | `d7aa9e19bcbea7f14a341d47af30fd98c96356903520cd287633c53463159af9` | Clean UI and simple navigation | A little more spacing would look better | `986a02a` |
+| Mohammad Faizan | mohdfaizan8222@gmail.com | 4 | `GCYIZ3UPGAJZ636PBLVUMKBCQD4UPAYFS22AH5C47JE2TSCHB3ZG7USW` | `127edd1d70b76793c09c11953217eabfd374e97124364249cf6b30302ced71b1` | Overall experience was good | Some buttons could stand out more | `1e38915` |
+| Sivam Singh | sivamsingh168@gmail.com | 4 | `GAF7VTEDS55DSC6EMPXGN723BXZBSM2DPWXTZBF6JX4YR45RMULS42LN` | `b58c46c587ef8dc1493d3f9d4aa5ebcc1f5a1a85382ce97948093a2eb52588fd` | Easy to understand and use | The mobile layout can be slightly cleaner | `7b84fcf` |
+| Singara Velan | singaravelancsk@gmail.com | 5 | `GC4BEPJXM2W642GQZ44HJ2IPXITJJ6BP7AHAYAQMXTKFGMSSUSDWCUZT` | `4d766b31298923e1e847f34e568bf92e7f9fe3d9accf5e6740462af22317cc6c` | Simple and pretty smooth. | Make important actions more visually clear | `c82e0d1` |
+| Neeru Doshi | neerudoshi8@gmail.com | 4 | `GCJFBWFYE3ZGDHF4RBJ7JDVTKBOU2KUX4M6HTY7ERCYL6WBRJILKL5M3` | `f3990356cadf5a49f5c0a517b928085dc9c0eb291131a28bbeb2838bf3a7603e` | Simple and smooth experience | Some labels could be a little clearer | `7733141` |
+| Bipronil Ghosh | bipronilg@gmail.com | 4 | `GDBP7X6EUSNW3B7UB767Z2CRAJRTPTJCRIC4SWQU42LCMUYUBXVI75KL` | `cbf5d8ce3eb4775aa4dfaa68e1f5389a75362a5725f8b0db31f3daba8a4a8a25` | Pretty straightforward to use | Buttons can have slightly better contrast | `ac90587` |
+| Vijendra Thakur | vijendrat418@gmail.com | 4 | `GCZ3ZIEKPR5LVNXLVGZPYIDMUPHMTADQI6MOJGDCY3TU3PLRDBFBA34Q` | `9debef809f4ece6210f12f6b9af54580a7992478f520e3618215a23f0306eb63` | Good and easy to understand | A bit more spacing between sections would help | `c27f3e4` |
+| Tanull Jain | tanulljain2411@gmail.com | 4 | `GA3QCLUDDKSR42ZC5E6QEUGOYZYG5VH55RFIPRLP73GAZX3ZOVISF4JN` | `6b4708bfbed1ea41b04d3d73ee1c61ea8e0e8d30c60b811524e83dadace3f262` | Simple and easy to follow | The form layout could feel a bit more compact | `a3ebc9d` |
+| Mayank Sengupta | includemayank@gmail.com | 5 | `GAGK7V56VLX6ZXFGKWZAM33TRZPXRLT4OJVCQC523GLWMR4RIQEG2HTT` | `557ca1c99491dacb36442d604d1c29e14ea84c2c2d0cf069e9b8b44b528c3c65` | Clean design and smooth flow | UI looks good and navigation feels natural. | `312820f` |
