@@ -148,7 +148,7 @@ export default function DoctorDashboard() {
         <StatCard label="Records provided" value={loadingFirst ? "…" : view.provided.length} />
       </StatRow>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-[.9fr_1.1fr]">
+      <div className="mt-7 grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
         {/* ------------------------------------------------ request form */}
         <Card>
           <CardHeader
@@ -210,7 +210,7 @@ export default function DoctorDashboard() {
           </form>
         </Card>
 
-        <section className="space-y-5">
+        <section className="space-y-6">
           {/* ------------------------------------------- sent requests */}
           <Card>
             <CardHeader
