@@ -31,4 +31,4 @@ jobs:
         run: cargo build --target wasm32v1-none --release
 
       - name: Type-check frontend
-        run: npm exec -- tsc --noEmit
+        run: npm run typecheck
