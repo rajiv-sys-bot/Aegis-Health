@@ -96,7 +96,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {!isLanding && (
         <nav
-          className="fixed inset-x-3 bottom-3 z-50 grid grid-cols-4 rounded-2xl border border-line bg-surface/95 p-1.5 shadow-pop backdrop-blur md:hidden"
+          className="fixed inset-x-2 bottom-2 z-50 grid grid-cols-4 rounded-2xl border border-line bg-surface/95 p-1.5 pb-[calc(0.375rem+env(safe-area-inset-bottom))] shadow-pop backdrop-blur md:hidden"
           aria-label="Mobile navigation"
         >
           {(isAdmin ? navigation.slice(-4) : navigation).map(
@@ -107,8 +107,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   key={href}
                   href={href}
                   className={cn(
-                    "flex min-h-12 flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-bold",
-                    active ? "bg-brand-50 text-brand-700" : "text-ink-muted",
+                    "flex min-h-11 flex-col items-center justify-center gap-1 rounded-xl px-1 text-[10px] font-bold transition-colors",
+                    active
+                      ? "bg-brand-50 text-brand-700 shadow-sm"
+                      : "text-ink-muted hover:bg-surface-muted hover:text-ink-secondary",
                   )}
                 >
                   <Icon className="size-4" />
