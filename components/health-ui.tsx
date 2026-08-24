@@ -26,11 +26,12 @@ const BUTTON_BASE =
   "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-55 select-none";
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
-  primary: "bg-brand-600 text-white hover:bg-brand-700 active:bg-brand-800",
+  primary:
+    "bg-brand-600 text-white shadow-sm shadow-brand-900/15 hover:bg-brand-700 hover:shadow-md active:bg-brand-800",
   secondary:
-    "border border-line-strong bg-surface text-ink hover:border-brand-400 hover:text-brand-700",
+    "border border-line-strong bg-surface text-ink shadow-sm hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700",
   ghost: "text-ink-secondary hover:bg-surface-muted hover:text-ink",
-  danger: "bg-danger text-white hover:brightness-95",
+  danger: "bg-danger text-white shadow-sm shadow-danger/15 hover:brightness-95",
   subtle: "bg-brand-50 text-brand-700 hover:bg-brand-100",
 };
 
