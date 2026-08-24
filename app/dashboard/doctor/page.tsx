@@ -156,7 +156,10 @@ export default function DoctorDashboard() {
             description="Audit-only request. Permission still requires the patient's signature."
           />
           <form onSubmit={requestAccess} className="space-y-4 p-5">
-            <Field label="Patient wallet" hint="Stellar account (G…) that owns the record.">
+            <Field
+              label="Patient wallet address"
+              hint="The Stellar account (G…) that owns this record."
+            >
               <Input
                 value={patient}
                 onChange={(e) => setPatient(e.target.value)}
@@ -166,7 +169,10 @@ export default function DoctorDashboard() {
                 className="font-mono text-[13px]"
               />
             </Field>
-            <Field label="Record ID · SHA-256" hint="64-character hex id shared by the patient or referral.">
+            <Field
+              label="Record ID (SHA-256)"
+              hint="The 64-character hexadecimal ID shared by the patient or referral."
+            >
               <Input
                 value={recordId}
                 onChange={(e) => setRecordId(e.target.value)}
@@ -178,7 +184,7 @@ export default function DoctorDashboard() {
             </Field>
             <div>
               <span className="mb-1.5 block text-[13px] font-medium text-ink">
-                Requested duration
+                Access duration
               </span>
               <div className="grid grid-cols-3 gap-2">
                 {DURATIONS.map((item) => (
