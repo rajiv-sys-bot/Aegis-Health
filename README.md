@@ -10,14 +10,14 @@ Fill these in before submitting the monthly challenge. Empty values are intentio
 
 | Evidence | Link |
 | --- | --- |
-| Live deployment | `TODO: add Vercel / Netlify URL` |
-| Public GitHub repository | `TODO: add repository URL` |
-| Pitch deck / PPT | `TODO: add Google Slides / PDF URL` |
-| Demo video (1–2 min) | `TODO: add YouTube / Loom URL` |
-| Contract address | `TODO: add deployed C... address` |
-| Example transaction hash | `TODO: add testnet transaction hash` |
-| User feedback form | `TODO: add Google Form URL` |
-| Exported feedback sheet | `TODO: add view-only CSV / Excel / Google Sheet URL` |
+| Live deployment | [https://aegis-health-psi.vercel.app/](https://aegis-health-psi.vercel.app/) |
+| Public GitHub repository | [https://github.com/rajiv-sys-bot/Aegis-Health](https://github.com/rajiv-sys-bot/Aegis-Health) |
+| Pitch deck / PPT | [https://docs.google.com/presentation/d/1qLS91-Ei7CKsWkpiBM2gwIMHyjdP_EfZQrExtsTj4uo/edit?usp=sharing](https://docs.google.com/presentation/d/1qLS91-Ei7CKsWkpiBM2gwIMHyjdP_EfZQrExtsTj4uo/edit?usp=sharing)|
+| Demo video (1–2 min) | [https://drive.google.com/file/d/1p4nUeOEobycbn7afOXhqxgpRjimcEH9N/view?usp=sharing](https://drive.google.com/file/d/1p4nUeOEobycbn7afOXhqxgpRjimcEH9N/view?usp=sharing)` |
+| Contract address | [CAMNUFS7SGCTUQTLNYN7WM5AIEB22X4F3M72VVRMVXWMEQFWZXLFU7C2](https://stellar.expert/explorer/testnet/contract/CAMNUFS7SGCTUQTLNYN7WM5AIEB22X4F3M72VVRMVXWMEQFWZXLFU7C2) |
+| transaction hash | [ef8298d077c6e7b49b8d9b8e2a253c06ca62a5ff0693e004472ed7ac27ea4280](https://stellar.expert/explorer/testnet/tx/ef8298d077c6e7b49b8d9b8e2a253c06ca62a5ff0693e004472ed7ac27ea4280) |
+| User feedback form | [https://forms.gle/UhK2wWuYHKGpKmvMA](https://forms.gle/UhK2wWuYHKGpKmvMA)|
+| Exported feedback sheet |[https://docs.google.com/spreadsheets/d/1fcN5CnYHLtw9vPVSbs6oVyawgnvMuJrfIdnJLrC4c0U/edit?usp=drivesdk](https://docs.google.com/spreadsheets/d/1fcN5CnYHLtw9vPVSbs6oVyawgnvMuJrfIdnJLrC4c0U/edit?usp=drivesdk) |
 
 Detailed evidence matrix: [`docs/submission-checklist.md`](docs/submission-checklist.md).
 
@@ -224,13 +224,3 @@ Frontend behavior is split between `app/` routes, reusable UI in `components/hea
 ## Privacy and safety boundary
 
 Aegis stores no plaintext medical record in the Soroban contract. The current demo uses integrity hashes and permission metadata. A production deployment still needs audited encryption/storage, key management, identity verification, access logging policy, threat modeling, legal/privacy review, and clinical safety review before handling real health information.
-
-## Challenge evidence
-
-The code can prove technical requirements. External evidence must be created from the real deployment and real testers:
-
-- Do not claim 10 or 50 users until wallet interactions are actually collected.
-- Do not fabricate transaction hashes, screenshots, analytics, feedback, PPT links, or video links.
-- Record the deployed contract address and at least one successful interaction after `npm run setup`.
-- Capture mobile UI, CI success, test output, analytics/monitoring, and real transaction activity for the submission.
-- Add the feedback form and exported sheet links, then document product changes with commit links in the checklist.

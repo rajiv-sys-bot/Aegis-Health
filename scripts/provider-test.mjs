@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Prepare named Testnet wallets as Providers, then run five unique
- * request_access transactions per invocation.
+ * Prepare named Testnet wallets as Providers, then run five unique provider
+ * transactions per invocation.
  *
  * Input files stay outside the repository:
  *   /Users/rajivdubey/Documents/Coding/notes/user.md
@@ -14,7 +14,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { randomInt } from "node:crypto";
+import { randomBytes, randomInt } from "node:crypto";
 import { Keypair, Transaction, rpc, scValToNative } from "@stellar/stellar-sdk";
 
 const { Client } = await import(
@@ -130,7 +130,11 @@ async function findDemoRecord(config, server) {
       return Buffer.from(record).toString("hex");
     }
   }
-  throw new Error("No registered demo record found in recent contract events.");
+  return null;
+}
+
+function testHash() {
+  return randomBytes(32);
 }
 
 async function main() {
@@ -183,23 +187,57 @@ async function main() {
   const results = [];
   for (const tester of selected) {
     const keypair = Keypair.fromSecret(tester.secret);
-    const hash = await send(clientFor(config, keypair), "request_access", {
-      requester: tester.address,
-      record_id: Buffer.from(recordId, "hex"),
-      requested_until: requestedUntil,
-    });
+    let hash;
+    let action;
+    let exercisedRecordId = recordId;
+    if (recordId) {
+      action = "request_access";
+      hash = await send(clientFor(config, keypair), action, {
+        requester: tester.address,
+        record_id: Buffer.from(recordId, "hex"),
+        requested_until: requestedUntil,
+      });
+    } else {
+      // A request_access call requires an existing record. If this contract
+      // was deployed with an external patient, setup intentionally created no
+      // records, so register a self-owned synthetic test record instead.
+      action = "register_record";
+      const recordBytes = testHash();
+      exercisedRecordId = recordBytes.toString("hex");
+      hash = await send(clientFor(config, keypair), action, {
+        patient: tester.address,
+        provider: tester.address,
+        record_id: recordBytes,
+        content_hash: testHash(),
+        locator_hash: testHash(),
+      });
+    }
     used.add(tester.email);
     used.add(tester.address);
     state.used = [...used];
     state.batches ??= [];
-    state.batches.push({ ...tester, txHash: hash, recordId, at: new Date().toISOString() });
+    state.batches.push({
+      ...tester,
+      action,
+      txHash: hash,
+      recordId: exercisedRecordId,
+      at: new Date().toISOString(),
+    });
     saveState(state);
-    results.push({ name: tester.name, email: tester.email, wallet: tester.address, txHash: hash });
+    results.push({
+      name: tester.name,
+      email: tester.email,
+      wallet: tester.address,
+      action,
+      txHash: hash,
+    });
   }
 
-  console.log(`\nCompleted batch: ${results.length} request_access transactions`);
+  console.log(`\nCompleted batch: ${results.length} provider transactions`);
   for (const result of results) {
-    console.log(`${result.name} | ${result.email} | ${result.wallet} | ${result.txHash}`);
+    console.log(
+      `${result.name} | ${result.email} | ${result.wallet} | ${result.action} | ${result.txHash}`,
+    );
   }
   console.log(`\nRemaining named testers: ${named.length - used.size / 2}`);
   console.log(`Extra provider-only wallets: ${extraWallets.length}`);
