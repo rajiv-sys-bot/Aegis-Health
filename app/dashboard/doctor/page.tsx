@@ -155,7 +155,7 @@ export default function DoctorDashboard() {
             title="Request record access"
             description="Audit-only request. Permission still requires the patient's signature."
           />
-          <form onSubmit={requestAccess} className="space-y-4 p-5">
+          <form onSubmit={requestAccess} className="space-y-3.5 p-5">
             <Field
               label="Patient wallet address"
               hint="The Stellar account (G…) that owns this record."
@@ -186,7 +186,7 @@ export default function DoctorDashboard() {
               <span className="mb-1.5 block text-[13px] font-medium text-ink">
                 Access duration
               </span>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1.5">
                 {DURATIONS.map((item) => (
                   <button
                     key={item.value}
