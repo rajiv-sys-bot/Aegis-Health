@@ -30,5 +30,11 @@ jobs:
         working-directory: contract
         run: cargo build --target wasm32v1-none --release
 
+      - name: Run Soroban contract tests
+        run: npm run test:contract
+
       - name: Type-check frontend
         run: npm run typecheck
+
+      - name: Lint frontend
+        run: npm run lint
