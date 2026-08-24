@@ -49,12 +49,16 @@ export function WalletConnectButton() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex h-8 items-center gap-2 rounded-lg border border-line-strong bg-surface px-2.5 text-[12.5px] font-medium text-ink transition-colors hover:border-brand-400"
+        aria-label="Open active wallet menu"
+        className="flex h-9 items-center gap-2 rounded-lg border border-brand-300 bg-brand-50 px-2.5 text-[12.5px] font-semibold text-brand-800 shadow-sm transition-colors hover:border-brand-500 hover:bg-brand-100"
       >
         <span
           aria-hidden
-          className="size-1.5 rounded-full bg-success"
+          className="size-2 rounded-full bg-success shadow-[0_0_0_3px_rgba(21,122,74,.14)]"
         />
+        <span className="hidden text-[10px] font-bold uppercase tracking-[0.08em] text-brand-700 sm:inline">
+          Active wallet
+        </span>
         <AddressChip address={address} head={4} tail={4} />
         <span aria-hidden className="text-ink-muted">
           ▾
