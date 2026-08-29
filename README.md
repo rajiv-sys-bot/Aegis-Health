@@ -80,7 +80,6 @@ Contract: `MedicalRecordsContract` in [`contract/src/lib.rs`](contract/src/lib.r
 Plaintext medical files, private locators, encryption keys, and clinical details are not written to Soroban.
 
 ### Events
-
 The contract emits typed events for `Initialized`, `AdminTransferred`, `RoleChanged`, `RecordRegistered`, `RecordRotated`, `AccessRequested`, `AccessGranted`, `AccessRevoked`, `PolicySet`, `ClaimSubmitted`, `ClaimApproved`, `ClaimRejected`, `ClaimCancelled`, and `ClaimPaid`. The frontend decodes these in [`lib/events.ts`](lib/events.ts) and renders them in the Audit log.
 
 ## How to use
