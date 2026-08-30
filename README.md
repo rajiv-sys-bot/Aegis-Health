@@ -206,19 +206,146 @@ Copy [`.env.example`](.env.example) only when connecting an existing deployment.
 
 ## Architecture
 
-```text
-Freighter wallet
-      │ signs contract calls
-      ▼
-Next.js App Router ── Soroban SDK ── Stellar testnet
-      │                         ▲
-      └── RPC reads + events ────┘
+### System context
 
-Encrypted record payloads stay off-chain.
-Soroban stores hashes, permissions, expiry, roles, policies, claims, and events.
+```mermaid
+flowchart LR
+    Patient([Patient])
+    Provider([Provider / clinic])
+    Insurer([Insurer])
+    Admin([Contract admin])
+
+    subgraph Browser[User browser]
+        Web[Aegis Next.js UI]
+        Wallet[Freighter wallet]
+        Web <-->|request signature / return signed XDR| Wallet
+    end
+
+    RPC[Stellar Soroban RPC]
+
+    subgraph Testnet[Stellar testnet]
+        Contract[MedicalRecordsContract]
+        State[(Soroban persistent state)]
+        Events[(Contract event stream)]
+        Token[Demo Stellar Asset Contract]
+        Contract <--> State
+        Contract --> Events
+        Contract -->|atomic claim payout| Token
+    end
+
+    Store[(Encrypted private record store)]
+
+    Patient --> Web
+    Provider --> Web
+    Insurer --> Web
+    Admin --> Web
+    Web -->|read state and query events| RPC
+    Web -->|submit wallet-signed transaction| RPC
+    RPC <--> Contract
+    Provider -.->|store / fetch encrypted payload| Store
+    Web -.->|future integration; not included in demo| Store
 ```
 
-Frontend behavior is split between `app/` routes, reusable UI in `components/health-ui.tsx`, contract views in `hooks/use-views.ts`, event decoding in `lib/events.ts`, and generated client bindings in `lib/medical-contract`.
+Next.js app has no separate application backend, API route, or database in current design. Browser talks directly to Soroban RPC. Freighter keeps private keys outside app and authorizes state changes. Encrypted record storage and key-envelope delivery are production integration points; this repository implements their on-chain hashes and commitments, not storage transport itself.
+
+### Frontend layers
+
+```mermaid
+flowchart TD
+    Routes["Routes: landing, patient, clinic, claims, admin, audit"]
+    Shell["App shell: navigation, wallet state, toasts"]
+    Views["View hooks: role-specific loading and refresh"]
+    Projection["Event decoder + deterministic reducers"]
+    Reads["Typed point reads"]
+    Tx["Transaction builder and signer bridge"]
+    Bindings["Generated Soroban TypeScript bindings"]
+    SDK["Stellar SDK + Freighter API"]
+    RPC["Soroban RPC"]
+
+    Routes --> Shell
+    Routes --> Views
+    Routes --> Tx
+    Views --> Projection
+    Views --> Reads
+    Projection --> SDK
+    Reads --> Bindings
+    Tx --> Bindings
+    Bindings --> SDK
+    SDK --> RPC
+```
+
+| Layer | Responsibility | Main source |
+| --- | --- | --- |
+| Routes and UI | Role dashboards, forms, wallet gates, audit export, transaction feedback | [`app/`](app), [`components/`](components) |
+| Wallet session | Connect/disconnect Freighter, expose active public key and network state | [`components/wallet-provider.tsx`](components/wallet-provider.tsx) |
+| View models | Load role-specific events, combine them with contract point reads, expose refresh/error state | [`hooks/use-views.ts`](hooks/use-views.ts), [`hooks/use-contract-events.ts`](hooks/use-contract-events.ts) |
+| Event projection | Decode RPC XDR events and fold lifecycle events into records, grants, claims, and role registries | [`lib/events.ts`](lib/events.ts), [`lib/event-reducers.ts`](lib/event-reducers.ts) |
+| Contract gateway | Configure RPC, construct typed calls, simulate, request wallet signatures, submit, and wait for confirmation | [`lib/stellar-config.ts`](lib/stellar-config.ts), [`lib/stellar.ts`](lib/stellar.ts), [`lib/reads.ts`](lib/reads.ts) |
+| Generated bindings | TypeScript representation of contract methods and values | [`lib/medical-contract/`](lib/medical-contract) |
+
+Dashboards use contract events as a lightweight client-side index because contract storage has no enumeration keys. Events discover relevant IDs and reconstruct lifecycle state; typed point reads then retrieve or verify authoritative current objects. No centralized indexer is required for demo scale.
+
+### Contract boundary and state
+
+```mermaid
+flowchart TB
+    Calls[Authenticated contract calls]
+
+    subgraph Contract[MedicalRecordsContract]
+        Auth[Address signature + role checks]
+        Rules[Consent, expiry, key-version, policy, and claim-state rules]
+        Settlement[Atomic token settlement]
+        Emit[Typed event emission]
+        Auth --> Rules
+        Rules --> Settlement
+        Rules --> Emit
+    end
+
+    Calls --> Auth
+    Rules --> AdminState["Admin + Role(account)"]
+    Rules --> RecordState["Record(record_id)"]
+    Rules --> GrantState["Grant(record_id, grantee)"]
+    Rules --> PolicyState["Policy(insurer, patient)"]
+    Rules --> ClaimState["Claim(claim_id)"]
+    Settlement --> SAC[Stellar Asset Contract]
+    Emit --> EventLog[RPC-queryable event log]
+```
+
+All contract values use persistent Soroban storage with TTL extension. Storage keys are direct lookups: `Admin`, `Role(account)`, `Record(record_id)`, `Grant(record_id, grantee)`, `Policy(insurer, patient)`, and `Claim(claim_id)`.
+
+### Transaction and read paths
+
+State-changing flow:
+
+1. Route validates form input and creates typed contract call through generated bindings.
+2. Soroban RPC simulates call and returns authorization/fee data.
+3. Freighter asks connected account to sign transaction on Stellar Testnet.
+4. Signed envelope is submitted to RPC; UI waits until transaction succeeds or fails.
+5. Contract authenticates required addresses, enforces role/lifecycle rules, updates persistent state, and emits typed event atomically.
+6. UI displays transaction hash, then refreshes event-backed view.
+
+Read flow:
+
+1. `use-contract-events` queries contract events with role/topic filters and paginates RPC results.
+2. `lib/events.ts` converts XDR topics and values into JSON-safe objects.
+3. Pure reducers reconstruct current dashboard rows from ordered events.
+4. `lib/reads.ts` performs authoritative point reads such as `get_record`, `get_grant`, `get_claim`, `get_policy`, and `has_access`.
+
+### Trust and privacy boundaries
+
+- **Browser and wallet:** UI is untrusted presentation/client logic. Contract never trusts a claimed actor; required Soroban address authorization must be present in signed transaction.
+- **On-chain:** roles, hashes, consent expiry, key versions, policies, claim states, payout, and audit events are public testnet data and contract-enforced.
+- **Off-chain:** plaintext records, encrypted payloads, private locators, encryption keys, and encrypted key envelopes must remain outside chain. Only SHA-256 hashes or commitments enter contract state.
+- **RPC:** public transport for simulation, submission, reads, and events. RPC availability affects UI, but cannot bypass contract authorization.
+- **Demo boundary:** SAC token and test identities have no real-world value. Production needs authenticated clinical identity, audited storage/encryption, secure key delivery, event indexing, monitoring, and compliance controls.
+
+### Deployment topology
+
+- **Web:** Next.js 16 app, deployable to Vercel or runnable locally with `npm run dev`.
+- **Wallet:** Freighter browser extension configured for Stellar Testnet.
+- **Chain:** compiled Rust/Wasm contract plus demo SAC token deployed by `scripts/setup.sh`.
+- **Configuration:** public contract/RPC/token IDs and demo public keys in `.env.local`; demo secret keys in gitignored `scripts/aegis-accounts.local.env`.
+- **CI:** contract compile/tests plus Next.js route generation, TypeScript check, and ESLint.
 
 ## Privacy and safety boundary
 
